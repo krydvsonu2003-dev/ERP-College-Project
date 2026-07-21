@@ -1,55 +1,58 @@
 spring:
   application:
-    name: nabarangpur-erp
+    name: ${APP_NAME:nabarangpur-erp}
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521/orclpdb
-    username: erp_user
-    password: erp123
+    url: ${DB_URL:jdbc:oracle:thin:@localhost:1521/orclpdb}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${DDL_AUTO:none}
     open-in-view: false
     database-platform: org.hibernate.dialect.OracleDialect
     properties:
       hibernate:
         format_sql: true
         jdbc:
-          time_zone: Asia/Kolkata
-    show-sql: false
+          time_zone: ${TIME_ZONE:Asia/Kolkata}
+    show-sql: ${SHOW_SQL:false}
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: ${MAX_FILE_SIZE:10MB}
+      max-request-size: ${MAX_REQUEST_SIZE:10MB}
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   error:
     include-message: always
 
 app:
   jwt:
-    secret: c2VjdXJlLW5hYmFyYW5ncHVyLXBoYXJtYWN5LWNvbGxlZ2UtZXJwLWp3dC1zaWduaW5nLWtleS1jaGFuZ2UtbWU=
-    access-token-expiry-ms: 3600000
-    refresh-token-expiry-ms: 86400000
+    secret: ${JWT_SECRET}
+    access-token-expiry-ms: ${JWT_ACCESS_TOKEN_EXPIRY_MS:3600000}
+    refresh-token-expiry-ms: ${JWT_REFRESH_TOKEN_EXPIRY_MS:86400000}
+
   security:
-    max-failed-login-attempts: 5
-    account-lock-minutes: 30
+    max-failed-login-attempts: ${MAX_FAILED_LOGIN_ATTEMPTS:5}
+    account-lock-minutes: ${ACCOUNT_LOCK_MINUTES:30}
+
   cors:
-    allowed-origins: http://localhost:5173,http://localhost:3000
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+
   files:
-    upload-dir: ./uploads
+    upload-dir: ${UPLOAD_DIR:./uploads}
 
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html
+    path: ${SWAGGER_UI_PATH:/swagger-ui.html}
   api-docs:
-    path: /api-docs
+    path: ${API_DOCS_PATH:/api-docs}
 
 logging:
   level:
-    com.nabarangpur.erp: INFO
-    org.springframework.security: WARN
+    com.nabarangpur.erp: ${APP_LOG_LEVEL:INFO}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:WARN}

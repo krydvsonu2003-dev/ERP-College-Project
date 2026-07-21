@@ -193,7 +193,14 @@ public class ExamService {
                 .publishedAt(Instant.now())
                 .remarks(remarks)
                 .build());
+        System.out.println("Total Result Cards = " + cards.size());
 
+        cards.forEach(c ->
+            System.out.println(
+                "Student = " + c.getStudent().getId() +
+                " Status = " + c.getStatus()
+            )
+        );
         // Recompute SGPA/CGPA for every student who has a result in this examination.
         cards.stream().map(c -> c.getStudent().getId()).distinct()
                 .forEach(studentId -> computeSemesterResult(studentId, examination));
@@ -203,8 +210,12 @@ public class ExamService {
     }
 
     private void computeSemesterResult(Long studentId, Examination examination) {
+    	System.out.println("=================================");
+        System.out.println("computeSemesterResult() called");
+        System.out.println("Student Id = " + studentId);
+        System.out.println("Exam Id = " + examination.getId());
         List<ResultCard> cards = resultCardRepository.findByStudentIdAndExaminationId(studentId, examination.getId());
-
+        System.out.println("Cards Found = " + cards.size());
         BigDecimal weightedSum = BigDecimal.ZERO;
         BigDecimal creditSum = BigDecimal.ZERO;
         for (ResultCard c : cards) {
@@ -246,6 +257,14 @@ public class ExamService {
         semesterResult.setTotalCredits(creditSum);
         semesterResult.setStatus(ResultStatus.PUBLISHED);
         semesterResultRepository.save(semesterResult);
+        System.out.println("Saving Semester Result");
+        System.out.println("SGPA = " + sgpa);
+        System.out.println("CGPA = " + cgpa);
+        System.out.println("Credits = " + creditSum);
+
+        semesterResult = semesterResultRepository.save(semesterResult);
+
+        System.out.println("Saved ID = " + semesterResult.getId());
     }
 
     @Transactional(readOnly = true)
